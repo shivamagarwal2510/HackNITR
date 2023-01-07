@@ -61,6 +61,7 @@ const Leaderboard = () => {
   var totalMedium = [];
   var totalHard = [];
   var totalScore = [];
+  var acceptanceRate = [];
   const [totalEasys, setTotalEasy] = useState([]);
   const [totalMediums, setTotalMedium] = useState([]);
   const [totalHards, setTotalHard] = useState([]);
@@ -96,30 +97,38 @@ const Leaderboard = () => {
         borderColor: "blue",
         backgroundColor: "blue",
       },
+      {
+        label: "Total",
+        data: [],
+        borderColor: "light green",
+        backgroundColor: "light green",
+      },
     ],
   });
   useEffect(() => {
     const fetchData = async () => {
       var userIds = ["itzSrish", "Shivamagarwal2510"];
       const url = "https://leetcode-stats-api.herokuapp.com/";
-
-      userIds.map(async (data) => {
+      var count = 0;
+      userIds.map( (data) => {
         var finalUrl = url + data;
-        await fetch(finalUrl)
+        console.log(finalUrl);
+        fetch(finalUrl)
           .then((data) => {
-            console.log("Api data", data);
+            // console.log("Api data", data);
             const res = data.json();
             return res;
           })
           .then((res) => {
             console.log("ressss", res);
-            console.log("easy", res.easySolved);
-
+            // console.log("easy", res.easySolved);
+            console.log(data, res.totalSolved);
             totalEasy.push(res.easySolved);
             totalMedium.push(res.mediumSolved);
             totalHard.push(res.hardSolved);
             totalScore.push(res.totalSolved);
-            console.log("Easy", totalEasy);
+            acceptanceRate.push(res.acceptanceRate);
+            // console.log("Easy", totalEasy);
             //  setTotalEasy(totalEasy)
             //  setTotalMedium(totalMedium)
             //  setTotalHard(totalHard)
@@ -156,10 +165,17 @@ const Leaderboard = () => {
                   borderColor: "blue",
                   backgroundColor: "blue",
                 },
+                {
+                  label: "Acceptance Rate",
+                  data: acceptanceRate,
+                  borderColor: "light green",
+                  backgroundColor: "light green",
+                },
               ],
             });
           });
       });
+      console.log("final", userIds, totalScore);
     };
 
     fetchData();

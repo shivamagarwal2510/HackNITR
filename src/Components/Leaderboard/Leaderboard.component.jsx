@@ -62,11 +62,11 @@ const options1 = {
 };
 
 const Leaderboard = () => {
-  var totalEasy = [];
-  var totalMedium = [];
-  var totalHard = [];
-  var totalScore = [];
-  var acceptanceRate = [];
+  var totalEasy = {};
+  var totalMedium = {};
+  var totalHard = {};
+  var totalScore = {};
+  var acceptanceRate = {};
   //   var rankings = new Map();
 
   const [totalEasys, setTotalEasy] = useState([]);
@@ -132,53 +132,80 @@ const Leaderboard = () => {
             console.log("ressss", res);
             // console.log("easy", res.easySolved);
             console.log(data, res.totalSolved);
-            totalEasy.push(res.easySolved);
-            totalMedium.push(res.mediumSolved);
-            totalHard.push(res.hardSolved);
-            totalScore.push(res.totalSolved);
-            acceptanceRate.push(res.acceptanceRate);
+            totalEasy[data] = res.easySolved;
+            totalMedium[data] = res.mediumSolved;
+            totalHard[data] = res.hardSolved;
+            totalScore[data] = res.totalSolved;
+            acceptanceRate[data] = res.acceptanceRate;
             rankings[data] = res.ranking;
-
+            console.log("totalScore", totalScore);
             // console.log("Easy", totalEasy);
             //  setTotalEasy(totalEasy)
             //  setTotalMedium(totalMedium)
             //  setTotalHard(totalHard)
-
+             var totalScoreArr = [];
+             var userIdsArr = [];
+             for (var key in totalScore) {
+               totalScoreArr.push(
+                 totalScore[key]
+               );
+               userIdsArr.push(key);
+             }
+             var totalEasyArr = [];
+             
+             for (var key in totalEasy) {
+               totalEasyArr.push(totalEasy[key]);
+             }
+             var totalMedArr = [];
+             
+             for (var key in totalMedium) {
+               totalMedArr.push(totalMedium[key]);
+             }
+             var totalHardArr = [];
+             
+             for (var key in totalHard) {
+               totalHardArr.push(totalHard[key]);
+             }
+             var acceptanceRateArr = [];
+             
+             for (var key in acceptanceRate) {
+               acceptanceRateArr.push(acceptanceRate[key]);
+             }
             setData({
-              labels: userIds,
+              labels: userIdsArr,
               datasets: [
                 {
                   label: "Easy",
-                  data: totalEasy,
+                  data: totalEasyArr,
                   borderColor: "green",
                   backgroundColor: "green",
                 },
                 {
                   label: "Medium",
-                  data: totalMedium,
+                  data: totalMedArr,
                   borderColor: "yellow",
                   backgroundColor: "yellow",
                 },
                 {
                   label: "Hard",
-                  data: totalHard,
+                  data: totalHardArr,
                   borderColor: "red",
                   backgroundColor: "red",
                 },
               ],
             });
             setData1({
-              labels: userIds,
+              labels: userIdsArr,
               datasets: [
                 {
                   label: "Total",
-                  data: totalScore,
+                  data: totalScoreArr,
                   borderColor: "blue",
                   backgroundColor: "blue",
                 },
                 {
                   label: "Acceptance Rate",
-                  data: acceptanceRate,
+                  data: acceptanceRateArr,
                   borderColor: "light green",
                   backgroundColor: "light green",
                 },
@@ -207,6 +234,7 @@ const Leaderboard = () => {
       value: rankings[key],
     });
   }
+  
 
   var sorted = array.sort(function (a, b) {
     return a.value > b.value ? 1 : b.value > a.value ? -1 : 0;
@@ -227,8 +255,8 @@ const Leaderboard = () => {
         <Bar data={data} options={options} />
         <Bar data={data1} options={options1} />
       </div>
-      <div className="board w-[80%] m-auto" >
-        <h1 className="leaderboard m-10">Leaderboard</h1>
+      <div className="board w-[80%] mt-10 m-auto" >
+        <strong className="leaderboard mt-20 text-2xl">Leaderboard</strong>
         <Profiles
           Leaderboard={sorted}
         ></Profiles>

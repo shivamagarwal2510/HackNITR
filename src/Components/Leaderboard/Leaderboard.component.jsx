@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./Leaderboard.css";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +11,8 @@ import {
 } from "chart.js";
 
 import { Bar } from "react-chartjs-2";
+
+import Profiles from "./Profiles";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -18,6 +21,8 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+
 const options = {
   indexAxis: "x",
   elements: {
@@ -62,11 +67,15 @@ const Leaderboard = () => {
   var totalHard = [];
   var totalScore = [];
   var acceptanceRate = [];
+  //   var rankings = new Map();
+
   const [totalEasys, setTotalEasy] = useState([]);
   const [totalMediums, setTotalMedium] = useState([]);
   const [totalHards, setTotalHard] = useState([]);
+  const [sortedRankings, setSortedRankings] = useState({});
+  const [rankings, setRankings] = useState({});
   const [data, setData] = useState({
-    labels: ["Shivam", "Srishti"],
+    labels: ["itzSrish", "Shivamagarwal2510", "ipriyanshi"],
     datasets: [
       {
         label: "Easy",
@@ -89,7 +98,7 @@ const Leaderboard = () => {
     ],
   });
   const [data1, setData1] = useState({
-    labels: ["Shivam", "Srishti"],
+    labels: ["itzSrish", "Shivamagarwal2510", "ipriyanshi"],
     datasets: [
       {
         label: "Total",
@@ -107,13 +116,13 @@ const Leaderboard = () => {
   });
   useEffect(() => {
     const fetchData = async () => {
-      var userIds = ["itzSrish", "Shivamagarwal2510"];
+      var userIds = ["itzSrish", "Shivamagarwal2510", "ipriyanshi"];
       const url = "https://leetcode-stats-api.herokuapp.com/";
       var count = 0;
-      userIds.map( (data) => {
+      userIds.map(async (data) => {
         var finalUrl = url + data;
         console.log(finalUrl);
-        fetch(finalUrl)
+        await fetch(finalUrl)
           .then((data) => {
             // console.log("Api data", data);
             const res = data.json();
@@ -128,6 +137,8 @@ const Leaderboard = () => {
             totalHard.push(res.hardSolved);
             totalScore.push(res.totalSolved);
             acceptanceRate.push(res.acceptanceRate);
+            rankings[data] = res.ranking;
+
             // console.log("Easy", totalEasy);
             //  setTotalEasy(totalEasy)
             //  setTotalMedium(totalMedium)
@@ -175,24 +186,54 @@ const Leaderboard = () => {
             });
           });
       });
-      console.log("final", userIds, totalScore);
+      //   console.log("final", userIds, totalScore, rankings);
+      //   console.log("entries",[...rankings.entries()]);
+      //   const sortedRanking = new Map(
+      //     // console.log("...rankings", [...rankings.entries()] )
+      //     [...rankings.entries()].sort((a, b) => b[1] - a[1])
+      //   )
+
+      //   setSortedRankings(sortedRanking);
+      //   console.log("sortedRanking", sortedRankings);
     };
 
     fetchData();
   }, []);
 
+  var array = [];
+  for (var key in rankings) {
+    array.push({
+      name: key,
+      value: rankings[key],
+    });
+  }
+
+  var sorted = array.sort(function (a, b) {
+    return a.value > b.value ? 1 : b.value > a.value ? -1 : 0;
+  });
+  console.log("rankings", rankings);
+  console.log("sorted", sorted);
+
   return (
-    <div
-      style={{
-        width: "50%",
-        height: "30%",
-        display: "flex",
-        marginTop: "140px",
-      }}
-    >
-      <Bar data={data} options={options} />
-      <Bar data={data1} options={options1} />
-    </div>
+    <>
+      <div
+        style={{
+          width: "50%",
+          height: "30%",
+          display: "flex",
+          marginTop: "50px",
+        }}
+      >
+        <Bar data={data} options={options} />
+        <Bar data={data1} options={options1} />
+      </div>
+      <div className="board w-[80%] m-auto" >
+        <h1 className="leaderboard m-10">Leaderboard</h1>
+        <Profiles
+          Leaderboard={sorted}
+        ></Profiles>
+      </div>
+    </>
   );
 };
 export default Leaderboard;

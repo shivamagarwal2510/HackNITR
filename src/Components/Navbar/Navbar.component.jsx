@@ -31,6 +31,10 @@ const Navbar = () => {
             <Link to="/my-courses">My Courses</Link>
             
           </li>
+          <li className="hover:underline underline-offset-8 hover:font-bold">
+            <Link to="/leaderboard">Leaderboard</Link>
+            
+          </li>
         </ul>
         <ul className="flex items-center">
           <li>

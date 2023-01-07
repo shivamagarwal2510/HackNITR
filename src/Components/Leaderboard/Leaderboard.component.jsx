@@ -1,34 +1,182 @@
-import React from 'react';
-import { useEffect } from 'react';
-var axios = require("axios");
-var data =
-  '{\r\n    "title":"Simple Bar Chart",\r\n    "theme":"Light",\r\n    "data":[\r\n        {\r\n            "value":10,\r\n            "label":"label a"\r\n        },\r\n        {\r\n            "value":20,\r\n            "label":"label b"\r\n        },\r\n        {\r\n            "value":80,\r\n            "label":"label c"\r\n        },\r\n        {\r\n            "value":50,\r\n            "label":"label d"\r\n        },\r\n        {\r\n            "value":70,\r\n            "label":"label e"\r\n        },\r\n        {\r\n            "value":25,\r\n            "label":"label f"\r\n        },\r\n        {\r\n            "value":60,\r\n            "label":"label g"\r\n        }\r\n    ]\r\n}';
+import { useEffect, useState } from "react";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-var config = {
-  method: "post",
-  url: "https://api.apyhub.com/generate/charts/bar/file",
-  headers: {
-    "apy-token": "APT0VVxnNCuFDPhFzuvwppCZmW5BMDVZZaSICVhv9gwEnyLIbMTh",
-    "Content-Type": "text/plain",
+import { Bar } from "react-chartjs-2";
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+const options = {
+  indexAxis: "x",
+  elements: {
+    bar: {
+      borderWidth: 2,
+    },
   },
-  data: data,
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "right",
+    },
+    title: {
+      display: true,
+      text: "Level wise analysis",
+    },
+  },
+};
+const options1 = {
+  indexAxis: "x",
+  elements: {
+    bar: {
+      borderWidth: 2,
+      width: "5px",
+    },
+  },
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "right",
+    },
+    title: {
+      display: true,
+      text: "Total Question Solved",
+    },
+  },
 };
 
-
-axios(config)
-  .then(function (response) {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch(function (error) {
-    console.log(error);
+const Leaderboard = () => {
+  var totalEasy = [];
+  var totalMedium = [];
+  var totalHard = [];
+  var totalScore = [];
+  const [totalEasys, setTotalEasy] = useState([]);
+  const [totalMediums, setTotalMedium] = useState([]);
+  const [totalHards, setTotalHard] = useState([]);
+  const [data, setData] = useState({
+    labels: ["Shivam", "Srishti"],
+    datasets: [
+      {
+        label: "Easy",
+        data: [],
+        borderColor: "green",
+        backgroundColor: "rgba(25, 90, 13, 0.5)",
+      },
+      {
+        label: "Medium",
+        data: [],
+        borderColor: "yellow",
+        backgroundColor: "rgba(25, 90, 13, 0.5)",
+      },
+      {
+        label: "Hard",
+        data: [],
+        borderColor: "red",
+        backgroundColor: "rgba(25, 90, 13, 0.5)",
+      },
+    ],
   });
+  const [data1, setData1] = useState({
+    labels: ["Shivam", "Srishti"],
+    datasets: [
+      {
+        label: "Total",
+        data: [],
+        borderColor: "blue",
+        backgroundColor: "blue",
+      },
+    ],
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      var userIds = ["itzSrish", "Shivamagarwal2510"];
+      const url = "https://leetcode-stats-api.herokuapp.com/";
 
+      userIds.map(async (data) => {
+        var finalUrl = url + data;
+        await fetch(finalUrl)
+          .then((data) => {
+            console.log("Api data", data);
+            const res = data.json();
+            return res;
+          })
+          .then((res) => {
+            console.log("ressss", res);
+            console.log("easy", res.easySolved);
 
-const Leaderboard = ()=> {
+            totalEasy.push(res.easySolved);
+            totalMedium.push(res.mediumSolved);
+            totalHard.push(res.hardSolved);
+            totalScore.push(res.totalSolved);
+            console.log("Easy", totalEasy);
+            //  setTotalEasy(totalEasy)
+            //  setTotalMedium(totalMedium)
+            //  setTotalHard(totalHard)
+
+            setData({
+              labels: userIds,
+              datasets: [
+                {
+                  label: "Easy",
+                  data: totalEasy,
+                  borderColor: "green",
+                  backgroundColor: "green",
+                },
+                {
+                  label: "Medium",
+                  data: totalMedium,
+                  borderColor: "yellow",
+                  backgroundColor: "yellow",
+                },
+                {
+                  label: "Hard",
+                  data: totalHard,
+                  borderColor: "red",
+                  backgroundColor: "red",
+                },
+              ],
+            });
+            setData1({
+              labels: userIds,
+              datasets: [
+                {
+                  label: "Total",
+                  data: totalScore,
+                  borderColor: "blue",
+                  backgroundColor: "blue",
+                },
+              ],
+            });
+          });
+      });
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div>
-      Leaderboard
+    <div
+      style={{
+        width: "50%",
+        height: "30%",
+        display: "flex",
+        marginTop: "140px",
+      }}
+    >
+      <Bar data={data} options={options} />
+      <Bar data={data1} options={options1} />
     </div>
-  )
-}
+  );
+};
 export default Leaderboard;

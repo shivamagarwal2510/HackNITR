@@ -14,7 +14,7 @@ const Navbar = () => {
     <>
       <nav className="flex shadow-md items-center justify-between">
         <Link to="/">
-          <strong className="mx-16 text-xl">AcadBoost</strong>
+          <strong className="mx-16 text-xl">DSA Prep</strong>
         </Link>
 
         <ul className=" px-2 py-4 flex space-x-8 justify-center items-center">

@@ -213,15 +213,6 @@ const Leaderboard = () => {
             });
           });
       });
-      //   console.log("final", userIds, totalScore, rankings);
-      //   console.log("entries",[...rankings.entries()]);
-      //   const sortedRanking = new Map(
-      //     // console.log("...rankings", [...rankings.entries()] )
-      //     [...rankings.entries()].sort((a, b) => b[1] - a[1])
-      //   )
-
-      //   setSortedRankings(sortedRanking);
-      //   console.log("sortedRanking", sortedRankings);
     };
 
     fetchData();

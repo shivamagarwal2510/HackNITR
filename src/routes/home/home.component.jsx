@@ -4,7 +4,7 @@ const Home = ()=>{
     return(
         <>
         
-            <img src={Img} className="h-[90vh] w-[100vw] -z-1 absolute"/>
+            <img src={Img} alt="" className="h-[90vh] w-[100vw] -z-1 absolute"/>
             <div className="relative h-[60vh] w-[70vw]  top-[45px] left-[200px] font-['Lobster'] ">
               <p className="text-4xl text-center p-6 ">Only you have to know one thing:
               </p>  
@@ -13,8 +13,8 @@ const Home = ()=>{
               </p>
               
             <Link to="courses">
-             <div className="w-[150px] mt-5 rounded  m-auto bg-purple-600"> 
-              <p className="text-white p-2">Start learning now</p></div></Link>
+             <div className="w-[160px] mt-5 rounded  m-auto bg-purple-600"> 
+              <p className="text-white py-2 text-center">Start learning now</p></div></Link>
              
             </div>
             

@@ -14,7 +14,7 @@ const Navbar = () => {
     <>
       <nav className="flex shadow-md items-center justify-between">
         <Link to="/">
-          <strong className="mx-16 text-xl">DSA Prep</strong>
+          <strong className="mx-16 text-xl">SkillBoost</strong>
         </Link>
 
         <ul className=" px-2 py-4 flex space-x-8 justify-center items-center">
@@ -53,9 +53,9 @@ const Navbar = () => {
             
           </li>
           <li>
-            <button className="order-2 bg-purple-500 hover:bg-purple-400 text-white text-sm rounded-2xl px-4 py-2 mx-16 my-2">
+            <a href="mailto:shivgun03@gmail.com" target="_blank" className="order-2 bg-purple-500 hover:bg-purple-400 text-white text-sm rounded-2xl px-4 py-2 mx-16 my-2">
               CONTACT US
-            </button>
+            </a>
           </li>
         </ul>
       </nav>
